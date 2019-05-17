@@ -56,10 +56,11 @@ def PlotPerformance(parameters, inputfolder, outputfolder, filepostfix, plotfold
 
     log_model_performance(parameters=parameters, model_history=model_history, outputfolder=outputfolder)
     plot_loss(parameters=parameters, plotfolder=plotfolder, model_history=model_history)
-    # plot_accuracy(parameters=parameters, plotfolder=plotfolder, model_history=model_history)
-    # plot_rocs(parameters=parameters, plotfolder=plotfolder, pred_val=pred_val, labels_val=labels_val, sample_weights_val=sample_weights_val, eventweights_val=eventweights_val, pred_signals=pred_signals, eventweight_signals=eventweight_signals, usesignals=usesignals, use_best_model=use_best_model)
-    # plot_model(model, show_shapes=True, to_file=plotfolder+'/Model.pdf')
-    # plot_confusion_matrices(parameters=parameters, plotfolder=plotfolder, pred_train=pred_train, labels_train=labels_train, sample_weights_train=sample_weights_train, eventweights_train=eventweights_train, pred_val=pred_val, labels_val=labels_val, sample_weights_val=sample_weights_val, eventweights_val=eventweights_val, use_best_model=use_best_model)
+
+    plot_accuracy(parameters=parameters, plotfolder=plotfolder, model_history=model_history)
+#    plot_rocs(parameters=parameters, plotfolder=plotfolder, pred_val=pred_val, labels_val=labels_val, sample_weights_val=sample_weights_val, eventweights_val=eventweights_val, pred_signals=pred_signals, eventweight_signals=eventweight_signals, usesignals=usesignals, use_best_model=use_best_model)
+    plot_model(model, show_shapes=True, to_file=plotfolder+'/Model.ps')
+    #plot_confusion_matrices(parameters=parameters, plotfolder=plotfolder, pred_train=pred_train, labels_train=labels_train, sample_weights_train=sample_weights_train, eventweights_train=eventweights_train, pred_val=pred_val, labels_val=labels_val, sample_weights_val=sample_weights_val, eventweights_val=eventweights_val, use_best_model=use_best_model)
     #
     #
     # pred_trains, weights_trains, normweights_trains, lumiweights_trains, pred_vals, weights_vals, normweights_vals, lumiweights_vals, pred_tests, weights_tests, normweights_tests, lumiweights_tests = get_data_dictionaries(parameters=parameters, eventweights_train=eventweights_train, sample_weights_train=sample_weights_train, pred_train=pred_train, labels_train=labels_train, eventweights_val=eventweights_val, sample_weights_val=sample_weights_val, pred_val=pred_val, labels_val=labels_val, eventweights_test=eventweights_test, sample_weights_test=sample_weights_test, pred_test=pred_test, labels_test=labels_test)

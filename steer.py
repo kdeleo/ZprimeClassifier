@@ -32,7 +32,7 @@ from ExportModel import *
 
 
 
-parameters = {'layers':[512, 512, 512],
+parameters = {'layers':[512, 512],
               'batchsize': 8192,
               'classes':{0: ['QCD_Mu'], 1: ['TTbar'], 2:['DYJets'], 3:['WJets'], 4:['ST']},
               # 'classes':{0: ['QCD_Mu'], 1: ['TTbar', 'DYJets', 'WJets', 'ST']},
@@ -42,9 +42,11 @@ parameters = {'layers':[512, 512, 512],
               'regmethod': 'dropout',
               'regrate':0.40000,
               'batchnorm': True,
-              'epochs':250,
+#              'epochs':500,
+              'epochs':100,
               'learningrate': 0.00100,
-              'runonfraction': 0.99,
+#              'runonfraction': 0.99,
+              'runonfraction': 0.01,
               'eqweight':False}
 
 parameters_onpredictions ={'layers':[20, 20],
@@ -64,14 +66,14 @@ tag_onpredictions = dict_to_str(parameters_onpredictions)
 classtag_onpredictions = get_classes_tag(parameters_onpredictions)
 
 
-# # Get all the inputs
-# # ==================
-# GetInputs(parameters)
-# PlotInputs(parameters, inputfolder='input/'+classtag, filepostfix='', plotfolder='Plots/InputDistributions/' + classtag)
+# # # Get all the inputs
+# # # ==================
+GetInputs(parameters)
+PlotInputs(parameters, inputfolder='input/'+classtag, filepostfix='', plotfolder='Plots/InputDistributions/' + classtag)
 
 # # First network
 # # =============
-# TrainNetwork(parameters)
+TrainNetwork(parameters)
 # PredictExternal(parameters, inputfolder='input/'+classtag, outputfolder='output/'+tag, filepostfix='')
 # PlotPerformance(parameters, inputfolder='input/'+classtag, outputfolder='output/'+tag, filepostfix='', use_best_model=False, usesignals=[2,4])
 PlotPerformance(parameters, inputfolder='input/'+classtag, outputfolder='output/'+tag, filepostfix='', plotfolder='Plots/'+tag, use_best_model=True, usesignals=[2,4])

@@ -729,12 +729,13 @@ def fit_loss(losslist, maxfev=50000):
     def fitfunc(x, a, b, c, d, e):
         return a + b/x + c*x + d*x*x + e/x/x
 
+ #   print('len of losslist',len(losslist))
     x = range(len(losslist)+1)
     x = x[1:]
     x = np.array(x)
     fitx = x[9:]
     fity = losslist[9:]
-
+#    print 'more debug', fitfunc, fitx, fity, maxfev
     postfitpars, cov = opt.curve_fit(fitfunc, fitx, fity, maxfev=maxfev)
 
     return x, fitx, fitfunc, postfitpars

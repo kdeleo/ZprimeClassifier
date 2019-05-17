@@ -11,7 +11,7 @@ from IPython.display import FileLink, FileLinks
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, BatchNormalization
 from keras.utils import to_categorical, plot_model
-from keras.callbacks import History, ModelCheckpoint, ReduceLROnPlateau, EarlyStopping
+from keras.callbacks import History, ModelCheckpoint, ReduceLROnPlateau, EarlyStopping, TensorBoard
 from keras.optimizers import Adam
 from keras import metrics, regularizers
 import pickle
@@ -88,13 +88,19 @@ def TrainNetwork(parameters):
     checkpointer_everymodel = ModelCheckpoint(filepath='output/'+tag+'/model_epoch{epoch:02d}.h5', verbose=1, save_best_only=False, period=1)
     checkpoint_bestmodel = ModelCheckpoint(filepath='output/'+tag+'/model_best.h5', monitor='val_loss', verbose=0, save_best_only=True, save_weights_only=False, mode='min', period=1)
     earlystopping = EarlyStopping(monitor='val_loss', min_delta=0.005, patience=20, verbose=0, mode='min', baseline=None, restore_best_weights=True)
+
     LRreducer = ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=50, min_delta=0.001, mode='min')
     weights_train, weights_test = sample_weights_train, sample_weights_test
     if not eqweight:
         weights_train, weights_test = eventweights_train, eventweights_test
+
+
+
     # model.fit(input_train, labels_train, sample_weight=weights_train, batch_size=batch_size, epochs=epochs, shuffle=True, validation_data=(input_test, labels_test, weights_test), callbacks=[checkpointer, checkpoint_bestmodel, earlystopping], verbose=1)
     # model.fit(input_train, labels_train, sample_weight=weights_train, batch_size=batch_size, epochs=epochs, shuffle=True, validation_data=(input_test, labels_test, weights_test), callbacks=[checkpointer, checkpoint_bestmodel, LRreducer], verbose=2)
     # model.fit(input_train, labels_train, sample_weight=weights_train, batch_size=batch_size, epochs=epochs, shuffle=True, validation_data=(input_test, labels_test, weights_test), callbacks=[checkpointer, checkpoint_bestmodel], verbose=1)
+
+#    tensorboard = TensorBoard(log_dir='output/logs', histogram_freq=0, update_freq='epoch') #FixME
     model.fit(input_train, labels_train, sample_weight=weights_train, batch_size=batch_size, epochs=epochs, shuffle=True, validation_data=(input_test, labels_test, weights_test), callbacks=[checkpointer_everymodel, checkpoint_bestmodel], verbose=1)
 
 
