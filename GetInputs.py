@@ -57,7 +57,7 @@ def GetInputs(parameters):
     maxfiles_per_sample = {'TTbar': -1, 'WJets': -1, 'ST': -1, 'DYJets': -1, 'RSGluon': -1, 'RSGluon_All': -1, 'QCD_Mu': -1}
 
     # Find initial file for each class
-    #inputfiles = os.listdir('input/MLInput')
+#    inputfiles = os.listdir('input/MLInput')
 #    inputfiles = os.listdir(inputdir+systvar+inputsubdir)
     inputfiles = os.listdir(inputdir+inputsubdir+systvar)
 

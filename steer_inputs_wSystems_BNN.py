@@ -23,9 +23,9 @@ from GetInputs import *
 from RankNetworks import *
 from PredictExternal import *
 from functions import *
-from TrainModelOnPredictions import *
-from TrainSecondNetwork import *
-from TrainThirdNetwork import *
+#from TrainModelOnPredictions import *
+#from TrainSecondNetwork import *
+#from TrainThirdNetwork import *
 from ExportModel import *
 
 # ignore weird Warnings: "These warnings are visible whenever you import scipy
@@ -48,28 +48,31 @@ warnings.simplefilter(action='ignore', category=RuntimeWarning)
 #variations = ['JEC_up','JEC_down']
 #variations = ['JER_up','JER_down']
 #variations = ['JEC_up']
-variations = ['JEC_down']
-#variations = ['NOMINAL']
+#variations = ['JEC_down']
+variations = ['NOMINAL']
 merged_str = 'Merged'
 parameters = {
     'layers':[128, 128],
-    'batchsize': 131072,
+    'batchsize': 1028,
+    #'batchsize': 131072,
 #    'batchsize': 8192, #131072/16
 #    'batchsize': 64,
-    'classes':{0: ['QCD_Mu'], 1: ['TTbar'], 2:['WJets'], 3:['DYJets','ST']},
+    'classes':{0: ['ST'], 1: ['TTbar'], 2:['WJets']},
     'regmethod': 'dropout',
     'regrate':0.60000,
     'batchnorm': False,
-    'epochs':400,
-#    'epochs':7,
+#    'epochs':400,
+    'epochs':7,
     'learningrate': 0.00050,
 #    'runonfraction': 0.99,
-    'runonfraction': 0.49,
+#    'runonfraction': 0.49,
+    'runonfraction': 0.01,
     'eqweight':False,
     'preprocess': 'MinMaxScaler',
     'sigma': 1.0, #sigma for Gaussian prior (BNN only)
+    'inputdir': '../InputsTTbar/',
 #    'inputdir': 'input/2017_Moriond19JEC_RightLumiweights_forml_morevar_Puppi/',#general path to inputs with systematic variations
-    'inputdir': 'input/2017_Moriond19JEC_RightLumiweights_forml_morevar_Puppi_2/',#general path to inputs with systematic variations
+#    'inputdir': 'input/2017_Moriond19JEC_RightLumiweights_forml_morevar_Puppi_2/',#general path to inputs with systematic variations
     #        'systvar': variations[ivars],
 #    'inputsubdir': '/MLInput_Reduced/', #path to input files: inputdir + systvar + inputsubdir
     'inputsubdir': 'MLInput/', #path to input files: inputdir + systvar + inputsubdir
@@ -79,43 +82,46 @@ parameters = {
 tag = dict_to_str(parameters)
 classtag = get_classes_tag(parameters)
 
-# for ivars in range(len(variations)):
-#     merged_str = merged_str+'__'+variations[ivars]
-#     parameters['systvar'] = variations[ivars]
-#     # # # # # # Get all the inputs
-#     # # # # # # # # # ==================
-#     inputfolder = parameters['inputdir']+parameters['inputsubdir']+parameters['systvar']+'/'+parameters['prepreprocess']+'/'+ classtag
-#     GetInputs(parameters)
-#     PlotInputs(parameters, inputfolder=inputfolder, filepostfix='', plotfolder='Plots/'+parameters['prepreprocess']+'/InputDistributions/'+parameters['systvar']+'/' + classtag)
+######### GetInputs ########
+for ivars in range(len(variations)):
+     merged_str = merged_str+'__'+variations[ivars]
+     parameters['systvar'] = variations[ivars]
+     # # # # # # Get all the inputs
+     # # # # # # # # # ==================
+     inputfolder = parameters['inputdir']+parameters['inputsubdir']+parameters['systvar']+'/'+parameters['prepreprocess']+'/'+ classtag
+     GetInputs(parameters)
+     PlotInputs(parameters, inputfolder=inputfolder, filepostfix='', plotfolder='Plots/'+parameters['prepreprocess']+'/InputDistributions/'+parameters['systvar']+'/' + classtag)
     
-# MixInputs(parameters, outputfolder=parameters['inputdir']+parameters['preprocess']+'/'+merged_str+'/' + classtag, variations=variations, filepostfix='')
-# SplitInputs(parameters, outputfolder=parameters['inputdir']+parameters['preprocess']+'/'+merged_str+'/' + classtag, filepostfix='')
-# FitPrepocessing(parameters, outputfolder=parameters['inputdir']+parameters['preprocess']+'/'+merged_str+'/' + classtag, filepostfix='')
-# ApplyPrepocessing(parameters, outputfolder=parameters['inputdir']+parameters['preprocess']+'/'+merged_str+'/' + classtag, filepostfix='',setid='train')
-# ApplyPrepocessing(parameters, outputfolder=parameters['inputdir']+parameters['preprocess']+'/'+merged_str+'/' + classtag, filepostfix='',setid='test')
-# ApplyPrepocessing(parameters, outputfolder=parameters['inputdir']+parameters['preprocess']+'/'+merged_str+'/' + classtag, filepostfix='',setid='val')
-# ApplySignalPrepocessing(parameters, outputfolder=parameters['inputdir']+parameters['preprocess']+'/'+merged_str+'/' + classtag, filepostfix='')
+MixInputs(parameters, outputfolder=parameters['inputdir']+parameters['preprocess']+'/'+merged_str+'/' + classtag, variations=variations, filepostfix='')
+SplitInputs(parameters, outputfolder=parameters['inputdir']+parameters['preprocess']+'/'+merged_str+'/' + classtag, filepostfix='')
+FitPrepocessing(parameters, outputfolder=parameters['inputdir']+parameters['preprocess']+'/'+merged_str+'/' + classtag, filepostfix='')
+ApplyPrepocessing(parameters, outputfolder=parameters['inputdir']+parameters['preprocess']+'/'+merged_str+'/' + classtag, filepostfix='',setid='train')
+ApplyPrepocessing(parameters, outputfolder=parameters['inputdir']+parameters['preprocess']+'/'+merged_str+'/' + classtag, filepostfix='',setid='test')
+ApplyPrepocessing(parameters, outputfolder=parameters['inputdir']+parameters['preprocess']+'/'+merged_str+'/' + classtag, filepostfix='',setid='val')
+ApplySignalPrepocessing(parameters, outputfolder=parameters['inputdir']+parameters['preprocess']+'/'+merged_str+'/' + classtag, filepostfix='')
 
-# inputfolder=parameters['inputdir']+parameters['preprocess']+'/'+merged_str+'/' + classtag
-# outputfolder='output/'+parameters['preprocess']+'/'+merged_str+'/' + classtag+'/BNN_'+tag
-# plotfolder = 'Plots/'+parameters['preprocess']
-# PlotInputs(parameters, inputfolder=inputfolder, filepostfix='', plotfolder=plotfolder+'/InputDistributions/'+merged_str+'/' + classtag)
+inputfolder=parameters['inputdir']+parameters['preprocess']+'/'+merged_str+'/' + classtag
+outputfolder='output/'+parameters['preprocess']+'/'+merged_str+'/' + classtag+'/BNN_'+tag
+plotfolder = 'Plots/'+parameters['preprocess']
+PlotInputs(parameters, inputfolder=inputfolder, filepostfix='', plotfolder=plotfolder+'/InputDistributions/'+merged_str+'/' + classtag)
 
-# TrainBayesianNetwork(parameters, inputfolder=inputfolder, outputfolder=outputfolder)
-# PredictExternalBayesianNetwork(parameters, inputfolder=inputfolder, outputfolder=outputfolder, filepostfix='',nsamples=100)
-# PredictExternalBayesianNetwork(parameters, inputfolder=inputfolder, outputfolder=outputfolder, filepostfix='',nsamples=250)
+######
+
+TrainBayesianNetwork(parameters, inputfolder=inputfolder, outputfolder=outputfolder)
+PredictExternalBayesianNetwork(parameters, inputfolder=inputfolder, outputfolder=outputfolder, filepostfix='',nsamples=100)
+#PredictExternalBayesianNetwork(parameters, inputfolder=inputfolder, outputfolder=outputfolder, filepostfix='',nsamples=250)
 # #Plot validation results and store model for usage in UHH2, etc
-# PlotBayesianPerformance(parameters, inputfolder=inputfolder, outputfolder=outputfolder, filepostfix='', plotfolder=plotfolder+'/Output/'+merged_str+'/'+'/BNN_'+tag, use_best_model=False, usesignals=[2,4])
+PlotBayesianPerformance(parameters, inputfolder=inputfolder, outputfolder=outputfolder, filepostfix='', plotfolder=plotfolder+'/Output/'+merged_str+'/'+'/BNN_'+tag, use_best_model=False, usesignals=[2,4])
 
 
 #Test training on one and prediction on another set
 #input_var = 'Merged__NOMINAL__JEC_up__JEC_down__JER_up__JER_down'
 #input_var = 'Merged__JEC_up'
-input_var = 'Merged__JEC_down'
-training_var = 'Merged__NOMINAL'
-inputfolder=parameters['inputdir']+parameters['preprocess']+'/'+input_var+'/' + classtag
-outputfolder='output/'+parameters['preprocess']+'/'+training_var+'/' + classtag+'/BNN_'+tag
-plotfolder = 'Plots/'+parameters['preprocess']
-PredictExternalBayesianNetwork(parameters, inputfolder=inputfolder, outputfolder=outputfolder, filepostfix='',nsamples=99)
-PlotBayesianPerformance(parameters, inputfolder=inputfolder, outputfolder=outputfolder, filepostfix='', plotfolder=plotfolder+'/Output/Input_'+input_var+'_Training_'+training_var+'/'+'/BNN_'+tag, use_best_model=False, usesignals=[2,4])
-
+#input_var = 'Merged__JEC_down'
+#input_var = 'Merged__NOMINAL'
+#training_var = 'Merged__NOMINAL'
+#inputfolder=parameters['inputdir']+parameters['preprocess']+'/'+input_var+'/' + classtag
+#outputfolder='output/'+parameters['preprocess']+'/'+training_var+'/' + classtag+'/BNN_'+tag
+#plotfolder = 'Plots/'+parameters['preprocess']
+#PredictExternalBayesianNetwork(parameters, inputfolder=inputfolder, outputfolder=outputfolder, filepostfix='',nsamples=99)
+#PlotBayesianPerformance(parameters, inputfolder=inputfolder, outputfolder=outputfolder, filepostfix='', plotfolder=plotfolder+'/Output/Input_'+input_var+'_Training_'+training_var+'/'+'/BNN_'+tag, use_best_model=False, usesignals=[2,4])
