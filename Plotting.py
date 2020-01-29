@@ -51,11 +51,9 @@ def PlotPerformance(parameters, inputfolder, outputfolder, filepostfix, plotfold
     gErrorIgnoreLevel = kWarning
 
     # Get parameters
-    # runonfullsample = parameters['runonfullsample']
     runonfraction = parameters['runonfraction']
     fraction = get_fraction(parameters)
     eqweight = parameters['eqweight']
-    # classes = parameters['classes']
     tag = dict_to_str(parameters)
     classtag = get_classes_tag(parameters)
 
@@ -81,7 +79,7 @@ def PlotPerformance(parameters, inputfolder, outputfolder, filepostfix, plotfold
     plot_loss(parameters=parameters, plotfolder=plotfolder, model_history=model_history)
     plot_accuracy(parameters=parameters, plotfolder=plotfolder, model_history=model_history)
     plot_rocs(parameters=parameters, plotfolder=plotfolder, pred_val=pred_val, labels_val=labels_val, sample_weights_val=sample_weights_val, eventweights_val=eventweights_val, pred_signals=pred_signals, eventweight_signals=eventweight_signals, usesignals=usesignals, use_best_model=use_best_model)
-    #plot_model(model, show_shapes=True, to_file=plotfolder+'/Model.pdf')
+    plot_model(model, show_shapes=True, to_file=plotfolder+'/Model.pdf')
     plot_confusion_matrices(parameters=parameters, plotfolder=plotfolder, pred_train=pred_train, labels_train=labels_train, sample_weights_train=sample_weights_train, eventweights_train=eventweights_train, pred_val=pred_val, labels_val=labels_val, sample_weights_val=sample_weights_val, eventweights_val=eventweights_val, use_best_model=use_best_model)
 
 
@@ -189,9 +187,9 @@ def PlotBayesianPerformance(parameters, inputfolder, outputfolder, filepostfix, 
 
     pred_signals = {}
     pred_signals_std = {}
-    for i in range(len(signal_identifiers)):
-        pred_signals[i] = np.median(pred_signals_all[i],axis=0)
-        pred_signals_std[i] = np.std(pred_signals_all[i],axis=0)
+#    for i in range(len(signal_identifiers)):
+#        pred_signals[i] = np.median(pred_signals_all[i],axis=0)
+#        pred_signals_std[i] = np.std(pred_signals_all[i],axis=0)
 
     pred_train = np.median(pred_train_all,axis=0)
     pred_test = np.median(pred_test_all,axis=0)
@@ -208,7 +206,7 @@ def PlotBayesianPerformance(parameters, inputfolder, outputfolder, filepostfix, 
     log_model_performance(parameters=parameters, model_history=model_history, outputfolder=outputfolder) #OK
     plot_loss(parameters=parameters, plotfolder=plotfolder, model_history=model_history) #OK
     plot_accuracy(parameters=parameters, plotfolder=plotfolder, model_history=model_history) #OK
-    #plot_model(model, show_shapes=True, to_file=plotfolder+'/Model.pdf') #OK
+#    plot_model(model, show_shapes=True, to_file=plotfolder+'/Model.pdf') #OK
     plot_rocs(parameters=parameters, plotfolder=plotfolder, pred_val=pred_val, labels_val=labels_val, sample_weights_val=sample_weights_val, eventweights_val=eventweights_val, pred_signals=pred_signals, eventweight_signals=eventweight_signals, usesignals=usesignals, use_best_model=use_best_model)
 
     plot_confusion_matrices(parameters=parameters, plotfolder=plotfolder, pred_train=pred_train, labels_train=labels_train, sample_weights_train=sample_weights_train, eventweights_train=eventweights_train, pred_val=pred_val, labels_val=labels_val, sample_weights_val=sample_weights_val, eventweights_val=eventweights_val, use_best_model=use_best_model)
@@ -310,7 +308,7 @@ def PlotDeepPerformance(parameters, inputfolder, outputfolder, filepostfix, plot
     plot_loss(parameters=parameters, plotfolder=plotfolder, model_history=model_history)
     plot_accuracy(parameters=parameters, plotfolder=plotfolder, model_history=model_history)
     plot_rocs(parameters=parameters, plotfolder=plotfolder, pred_val=pred_val, labels_val=labels_val, sample_weights_val=sample_weights_val, eventweights_val=eventweights_val, pred_signals=pred_signals, eventweight_signals=eventweight_signals, usesignals=usesignals, use_best_model=use_best_model)
-    #plot_model(model, show_shapes=True, to_file=plotfolder+'/Model.pdf')
+    plot_model(model, show_shapes=True, to_file=plotfolder+'/Model.pdf')
     plot_confusion_matrices(parameters=parameters, plotfolder=plotfolder, pred_train=pred_train, labels_train=labels_train, sample_weights_train=sample_weights_train, eventweights_train=eventweights_train, pred_val=pred_val, labels_val=labels_val, sample_weights_val=sample_weights_val, eventweights_val=eventweights_val, use_best_model=use_best_model)
 
 
@@ -396,4 +394,3 @@ def PlotInputs(parameters, inputfolder, filepostfix, plotfolder):
 
         sys.stdout.write( '{0:d} of {1:d} plots done.\r'.format(idx, len(variable_names)))
         if not i == len(variable_names): sys.stdout.flush()
-        plt.close()

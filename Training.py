@@ -59,8 +59,6 @@ def TrainNetwork(parameters, inputfolder, outputfolder):
     else:
         print 'Found the model "%s", not training a new one, go on to next function.' % (tag)
         return
-        # print 'Found model, but I will retrain it!'
-#    if not os.path.isdir('output/' + tag): os.makedirs('output/'+tag)
     if not os.path.isdir(outputfolder): os.makedirs(outputfolder)
 
     input_train, input_test, input_val, labels_train, labels_test, labels_val, sample_weights_train, sample_weights_test, sample_weights_val, eventweights_train, eventweights_test, eventweights_val, signals, signal_eventweights, signal_normweights = load_data(parameters, inputfolder=inputfolder, filepostfix='')
@@ -907,7 +905,8 @@ def TrainBayesianNetwork(parameters, inputfolder, outputfolder):
 
 
 #The same as BayesianNetwork but with simple Dense layers from TensorFlow for debuging
-def TrainDeepNetwork(parameters):
+#def TrainDeepNetwork(parameters):
+def TrainDeepNetwork(parameters, inputfolder, outputfolder):
     tfd = tfp.distributions
 
     # Get parameters
@@ -927,7 +926,7 @@ def TrainDeepNetwork(parameters):
     #FixME: can't simply re-load model with tfp, only weights are stored -> have to (re)build it 
     if not os.path.isdir('output/DNN_' + tag): os.makedirs('output/DNN_'+tag)
 
-    input_train, input_test, input_val, labels_train, labels_test, labels_val, sample_weights_train, sample_weights_test, sample_weights_val, eventweights_train, eventweights_test, eventweights_val, signals, signal_eventweights, signal_normweights = load_data(parameters, inputfolder='input/'+classtag, filepostfix='')
+    input_train, input_test, input_val, labels_train, labels_test, labels_val, sample_weights_train, sample_weights_test, sample_weights_val, eventweights_train, eventweights_test, eventweights_val, signals, signal_eventweights, signal_normweights = load_data(parameters, inputfolder=inputfolder, filepostfix='')
     kernel_regularizer = None
     if regmethod == 'L1':
         kernel_regularizer=regularizers.l1(regrate)

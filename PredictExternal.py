@@ -46,7 +46,7 @@ def PredictExternal(parameters, inputfolder, outputfolder, filepostfix):
     model_best = keras.models.load_model(outputfolder+'/model_best.h5')
     input_train, input_test, input_val, labels_train, labels_test, labels_val, sample_weights_train, sample_weights_test, sample_weights_val, eventweights_train, eventweights_test, eventweights_val, signals, signal_eventweights, signal_normweights = load_data(parameters, inputfolder=inputfolder, filepostfix=filepostfix)
 
-    signal_identifiers = ['RSGluon_All', 'RSGluon_M1000', 'RSGluon_M2000', 'RSGluon_M3000', 'RSGluon_M4000', 'RSGluon_M5000', 'RSGluon_M6000']
+#    signal_identifiers = ['RSGluon_All', 'RSGluon_M1000', 'RSGluon_M2000', 'RSGluon_M3000', 'RSGluon_M4000', 'RSGluon_M5000', 'RSGluon_M6000']
 
     # Do the predictions
     print 'Now that the model is trained, we\'re going to predict the labels of all 3 sets. '
@@ -106,12 +106,12 @@ def PredictExternal(parameters, inputfolder, outputfolder, filepostfix):
         tmp = pred_val[labels_val[:,cl] == 1]
         np.save(outputfolder+'/prediction_val_class'+str(cl)+'_best.npy'  , tmp)
 
-    print 'predicting for signals'
-    for i in range(len(signal_identifiers)):
-        pred_signal= model.predict(signals[i])
-        np.save(outputfolder+'/prediction_'+signal_identifiers[i]+'.npy'  , pred_signal)
-        pred_signal = model_best.predict(signals[i])
-        np.save(outputfolder+'/prediction_'+signal_identifiers[i]+'_best.npy'  , pred_signal)
+#    print 'predicting for signals'
+#    for i in range(len(signal_identifiers)):
+#        pred_signal= model.predict(signals[i])
+#        np.save(outputfolder+'/prediction_'+signal_identifiers[i]+'.npy'  , pred_signal)
+#        pred_signal = model_best.predict(signals[i])
+#        np.save(outputfolder+'/prediction_'+signal_identifiers[i]+'_best.npy'  , pred_signal)
 
     print "Keras pred_train[0] =",pred_train[0]
     print "Keras pred_val[0] =",pred_val[0]
@@ -137,7 +137,7 @@ def PredictExternalOnPredictions(parameters, inputfolder, inputfolder_prediction
     # for i in signals.keys():
     #     signals[i] = np.concatenate((signals[i], pred_signals[i]), axis=1)
 
-    signal_identifiers = ['RSGluon_All', 'RSGluon_M1000', 'RSGluon_M2000', 'RSGluon_M3000', 'RSGluon_M4000', 'RSGluon_M5000', 'RSGluon_M6000']
+#    signal_identifiers = ['RSGluon_All', 'RSGluon_M1000', 'RSGluon_M2000', 'RSGluon_M3000', 'RSGluon_M4000', 'RSGluon_M5000', 'RSGluon_M6000']
 
     # Do the predictions
     print 'Now that the model is trained, we\'re going to predict the labels of all 3 sets. '
@@ -187,12 +187,12 @@ def PredictExternalOnPredictions(parameters, inputfolder, inputfolder_prediction
         tmp = pred_val[labels_val[:,cl] == 1]
         np.save(outputfolder+'/prediction_val_class'+str(cl)+'_best.npy'  , tmp)
 
-    print 'predicting for signals'
-    for i in range(len(signal_identifiers)):
-        pred_signal= model.predict(signals[i])
-        np.save(outputfolder+'/prediction_'+signal_identifiers[i]+'.npy'  , pred_signal)
-        pred_signal = model_best.predict(signals[i])
-        np.save(outputfolder+'/prediction_'+signal_identifiers[i]+'_best.npy'  , pred_signal)
+#    print 'predicting for signals'
+#    for i in range(len(signal_identifiers)):
+#        pred_signal= model.predict(signals[i])
+#        np.save(outputfolder+'/prediction_'+signal_identifiers[i]+'.npy'  , pred_signal)
+#        pred_signal = model_best.predict(signals[i])
+#        np.save(outputfolder+'/prediction_'+signal_identifiers[i]+'_best.npy'  , pred_signal)
 
 
 
@@ -294,7 +294,7 @@ def PredictExternalBayesianNetwork(parameters, inputfolder, outputfolder, filepo
         print model.summary() 
 
        
-        signal_identifiers = ['RSGluon_All', 'RSGluon_M1000', 'RSGluon_M2000', 'RSGluon_M3000', 'RSGluon_M4000', 'RSGluon_M5000', 'RSGluon_M6000']
+#        signal_identifiers = ['RSGluon_All', 'RSGluon_M1000', 'RSGluon_M2000', 'RSGluon_M3000', 'RSGluon_M4000', 'RSGluon_M5000', 'RSGluon_M6000']
 
         # num_thresholds = 5000 # default is 200
         # auc, auc_op = tf.metrics.auc(labels, mean_op, num_thresholds=num_thresholds)
@@ -520,17 +520,17 @@ def PredictExternalBayesianNetwork(parameters, inputfolder, outputfolder, filepo
             np.save(outputfolder+'/prediction_test_class'+str(cl)+'.npy'  , tmp)
 
 
-        print 'predicting for signals'
-
-        for i in range(len(signal_identifiers)):
-            pred_signal = np.ones((nsamples, signals[i].shape[0],labels_train.shape[1]))
-            for isamp in range(nsamples):
-
-                #pred_signal_1d = np.asarray((model.predict(signals[i]))
-                pred_signal_1d = tf.nn.softmax(model.predict(signals[i])).eval(session=sess)
-                print("pred_signal_1d.shape = ",pred_signal_1d.shape)
-                pred_signal[isamp] = pred_signal_1d
-            np.save(outputfolder+'/prediction_'+signal_identifiers[i]+'.npy'  , pred_signal)
+#        print 'predicting for signals'
+#
+#        for i in range(len(signal_identifiers)):
+#            pred_signal = np.ones((nsamples, signals[i].shape[0],labels_train.shape[1]))
+#            for isamp in range(nsamples):
+#
+#                #pred_signal_1d = np.asarray((model.predict(signals[i]))
+#                pred_signal_1d = tf.nn.softmax(model.predict(signals[i])).eval(session=sess)
+#                print("pred_signal_1d.shape = ",pred_signal_1d.shape)
+#                pred_signal[isamp] = pred_signal_1d
+#            np.save(outputfolder+'/prediction_'+signal_identifiers[i]+'.npy'  , pred_signal)
 
         # print 'predicting for signals'
         # for i in range(len(signal_identifiers)):
@@ -586,7 +586,7 @@ def PredictExternalDeepNetwork(parameters, inputfolder, outputfolder, filepostfi
     model.set_weights(weight)
 
 
-    signal_identifiers = ['RSGluon_All', 'RSGluon_M1000', 'RSGluon_M2000', 'RSGluon_M3000', 'RSGluon_M4000', 'RSGluon_M5000', 'RSGluon_M6000']
+#    signal_identifiers = ['RSGluon_All', 'RSGluon_M1000', 'RSGluon_M2000', 'RSGluon_M3000', 'RSGluon_M4000', 'RSGluon_M5000', 'RSGluon_M6000']
 
     # Do the predictions
     print 'Now that the model is trained, we\'re going to predict the labels of all 3 sets. '
@@ -624,8 +624,8 @@ def PredictExternalDeepNetwork(parameters, inputfolder, outputfolder, filepostfi
         tmp = pred_val[labels_val[:,cl] == 1]
         np.save(outputfolder+'/prediction_val_class'+str(cl)+'.npy'  , tmp)
 
-    print 'predicting for signals'
-    for i in range(len(signal_identifiers)):
-        pred_signal= model.predict(signals[i])
-        np.save(outputfolder+'/prediction_'+signal_identifiers[i]+'.npy'  , pred_signal)
+#    print 'predicting for signals'
+#    for i in range(len(signal_identifiers)):
+#        pred_signal= model.predict(signals[i])
+#        np.save(outputfolder+'/prediction_'+signal_identifiers[i]+'.npy'  , pred_signal)
 

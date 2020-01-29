@@ -54,7 +54,7 @@ def GetInputs(parameters):
     else:
         os.makedirs(inputdir+inputsubdir+systvar+'/'+prepreprocess+'/'+ classtag)
 
-    maxfiles_per_sample = {'TTbar': -1, 'WJets': -1, 'ST': -1, 'DYJets': -1, 'RSGluon': -1, 'RSGluon_All': -1, 'QCD_Mu': -1}
+    maxfiles_per_sample = {'TTbar': -1, 'WJB': -1,'WJL': -1,'WJC': -1, 'ST_t': -1, 'ST_tW': -1, 'DY': -1}
 
     # Find initial file for each class
 #    inputfiles = os.listdir('input/MLInput')
@@ -112,48 +112,48 @@ def GetInputs(parameters):
         thislabel = thislabel.astype(np.int8)
         all_labels[cl] = thislabel
 
-    # now read in signal
-    signal_masses = [1000, 2000, 3000, 4000, 5000, 6000]
-    signal_identifiers = ['RSGluon_All']
-    for mass in signal_masses:
-        signal_identifiers.append('RSGluon_M' + str(mass))
+#    # now read in signal
+#    signal_masses = [1000, 2000, 3000, 4000, 5000, 6000]
+#    signal_identifiers = ['RSGluon_All']
+#    for mass in signal_masses:
+#        signal_identifiers.append('RSGluon_M' + str(mass))
     all_signals = {}
     all_signal_eventweights = {}
     lists_of_inputfiles_sig = []
-    for i in range(len(signal_identifiers)):
-        tmp = []
-        sample = signal_identifiers[i]
-        idx = 0
-        for j in range(len(inputfiles)):
-            if signal_identifiers[i]+'_' in inputfiles[j] and not 'Weights_' in inputfiles[j] and '.npy' in inputfiles[j]:
-                tmp.append(inputfiles[j])
-                idx += 1
-        lists_of_inputfiles_sig.append(tmp)
-    print lists_of_inputfiles_sig
+#    for i in range(len(signal_identifiers)):
+#        tmp = []
+#        sample = signal_identifiers[i]
+#        idx = 0
+#        for j in range(len(inputfiles)):
+#            if signal_identifiers[i]+'_' in inputfiles[j] and not 'Weights_' in inputfiles[j] and '.npy' in inputfiles[j]:
+#                tmp.append(inputfiles[j])
+#                idx += 1
+#        lists_of_inputfiles_sig.append(tmp)
+#    print lists_of_inputfiles_sig
 
     # Read files for this class
-    for i in range(len(lists_of_inputfiles_sig)):
-        print '\nNow starting with sample %s' % (signal_identifiers[i])
-        first = True
-        for j in range(len(lists_of_inputfiles_sig[i])):
-            print 'At file no. %i out of %i.' % (j+1, len(lists_of_inputfiles_sig[i]))
-            if first:
-                # thisinput = np.load(inputdir+systvar+inputsubdir+ lists_of_inputfiles_sig[i][j])
-                # thiseventweight = np.load(inputdir+systvar+inputsubdir+'Weights_' + lists_of_inputfiles_sig[i][j])
-                thisinput = np.load(inputdir+inputsubdir+systvar+'/'+ lists_of_inputfiles_sig[i][j])
-                thiseventweight = np.load(inputdir+inputsubdir+systvar+'/'+'Weights_' + lists_of_inputfiles_sig[i][j])
-
-                first = False
-            else:
-                # thisinput = np.concatenate((thisinput, np.load(inputdir+systvar+inputsubdir + lists_of_inputfiles_sig[i][j])))
-                # thiseventweight = np.concatenate((thiseventweight, np.load(inputdir+systvar+inputsubdir+ 'Weights_' + lists_of_inputfiles_sig[i][j])))
-                thisinput = np.concatenate((thisinput, np.load(inputdir+inputsubdir+systvar+'/'+ lists_of_inputfiles_sig[i][j])))
-                thiseventweight = np.concatenate((thiseventweight, np.load(inputdir+inputsubdir+systvar+'/'+ 'Weights_' + lists_of_inputfiles_sig[i][j])))
-
-        # thisinput = thisinput.astype(np.float32)
-        # thiseventweight = thiseventweight.astype(np.float32)
-        all_signals[i] = thisinput
-        all_signal_eventweights[i] = thiseventweight
+#    for i in range(len(lists_of_inputfiles_sig)):
+#        print '\nNow starting with sample %s' % (signal_identifiers[i])
+#        first = True
+#        for j in range(len(lists_of_inputfiles_sig[i])):
+#            print 'At file no. %i out of %i.' % (j+1, len(lists_of_inputfiles_sig[i]))
+#            if first:
+#                # thisinput = np.load(inputdir+systvar+inputsubdir+ lists_of_inputfiles_sig[i][j])
+#                # thiseventweight = np.load(inputdir+systvar+inputsubdir+'Weights_' + lists_of_inputfiles_sig[i][j])
+#                thisinput = np.load(inputdir+inputsubdir+systvar+'/'+ lists_of_inputfiles_sig[i][j])
+#                thiseventweight = np.load(inputdir+inputsubdir+systvar+'/'+'Weights_' + lists_of_inputfiles_sig[i][j])
+#
+#                first = False
+#            else:
+#                # thisinput = np.concatenate((thisinput, np.load(inputdir+systvar+inputsubdir + lists_of_inputfiles_sig[i][j])))
+#                # thiseventweight = np.concatenate((thiseventweight, np.load(inputdir+systvar+inputsubdir+ 'Weights_' + lists_of_inputfiles_sig[i][j])))
+#                thisinput = np.concatenate((thisinput, np.load(inputdir+inputsubdir+systvar+'/'+ lists_of_inputfiles_sig[i][j])))
+#                thiseventweight = np.concatenate((thiseventweight, np.load(inputdir+inputsubdir+systvar+'/'+ 'Weights_' + lists_of_inputfiles_sig[i][j])))
+#
+#        # thisinput = thisinput.astype(np.float32)
+#        # thiseventweight = thiseventweight.astype(np.float32)
+#        all_signals[i] = thisinput
+#        all_signal_eventweights[i] = thiseventweight
 
 
     if len(all_inputs) != len(classes) or len(all_labels) != len(classes) or len(all_labels) != len(all_eventweights):
@@ -189,17 +189,17 @@ def GetInputs(parameters):
     labels_total      = labels_total[shuffle]
     eventweight_total = eventweight_total[shuffle]
     label_concatenated = label_concatenated[shuffle]
-    for i in all_signals.keys():
-        shuffle_signal = np.random.permutation(np.size(all_signals[i], axis=0))
-        all_signals[i]       = all_signals[i][shuffle_signal]
-        all_signal_eventweights[i] = all_signal_eventweights[i][shuffle_signal]
+#    for i in all_signals.keys():
+#        shuffle_signal = np.random.permutation(np.size(all_signals[i], axis=0))
+#        all_signals[i]       = all_signals[i][shuffle_signal]
+#        all_signal_eventweights[i] = all_signal_eventweights[i][shuffle_signal]
 
     # Cut off some events if not running on full sample
     # percentage = 0.01
     percentage = runonfraction    
-    frac_train = 0.666 * percentage
-    frac_test  = 0.167 * percentage
-    frac_val   = 0.167 * percentage
+    frac_train = 0.6 * percentage
+    frac_test  = 0.2 * percentage
+    frac_val   = 0.2 * percentage
     
     sumweights = np.sum(eventweight_total, axis=0)
     print 'shape of all inputs: ', input_total.shape
@@ -296,8 +296,8 @@ def GetInputs(parameters):
     eventweight_train = np.asarray(eventweight_train).ravel()
     eventweight_test  = np.asarray(eventweight_test).ravel()
     eventweight_val   = np.asarray(eventweight_val).ravel()
-    for i in all_signal_eventweights.keys():
-        all_signal_eventweights[i] = np.asarray(all_signal_eventweights[i]).ravel()
+#    for i in all_signal_eventweights.keys():
+#        all_signal_eventweights[i] = np.asarray(all_signal_eventweights[i]).ravel()
 
     classtag = get_classes_tag(parameters)
 #    with open(inputdir+systvar+inputsubdir+ 'variable_names.pkl', 'r') as f:
@@ -377,9 +377,9 @@ def GetInputs(parameters):
 
 
 
-    for i in all_signals.keys():
-        np.save(output_path+'/'+signal_identifiers[i]+'.npy', all_signals[i])
-        np.save(output_path+'/'+signal_identifiers[i]+'_eventweight.npy', all_signal_eventweights[i])
+#    for i in all_signals.keys():
+#        np.save(output_path+'/'+signal_identifiers[i]+'.npy', all_signals[i])
+#        np.save(output_path+'/'+signal_identifiers[i]+'_eventweight.npy', all_signal_eventweights[i])
 
 
 def MixInputs(parameters, outputfolder, variations, filepostfix):
@@ -431,18 +431,18 @@ def MixInputs(parameters, outputfolder, variations, filepostfix):
             input_array_all = np.asarray(input_array).copy()
 
             input_signal_array = {}
-            for i in signals.keys():
-                eventweight_signals[i] = eventweight_signals[i].reshape(eventweight_signals[i].shape[0],1)
-                normweight_signals[i] = normweight_signals[i].reshape(normweight_signals[i].shape[0],1)
-                # print signals[i].shape, eventweight_signals[i].shape, normweight_signals[i].shape
-                #input_signal_array[i] = np.concatenate((signals[i], eventweight_signals[i], normweight_signals[i]), axis=1) #array with all signals at one place
-                input_signal_array[i] = np.concatenate((signals[i], eventweight_signals[i],normweight_signals[i]), axis=1) #array with all signals at one place
-                if isyst>0:
-                    tmp_input_signal_array = np.append(input_signal_array_all[i], input_signal_array[i],axis=0)
-                    input_signal_array_all[i].resize(tmp_input_signal_array.shape[0],tmp_input_signal_array.shape[1])
-                    input_signal_array_all[i] = tmp_input_signal_array.copy()
-                else:
-                    input_signal_array_all[i] = np.asarray(input_signal_array[i]).copy()
+#            for i in signals.keys():
+#                eventweight_signals[i] = eventweight_signals[i].reshape(eventweight_signals[i].shape[0],1)
+#                normweight_signals[i] = normweight_signals[i].reshape(normweight_signals[i].shape[0],1)
+#                # print signals[i].shape, eventweight_signals[i].shape, normweight_signals[i].shape
+#                #input_signal_array[i] = np.concatenate((signals[i], eventweight_signals[i], normweight_signals[i]), axis=1) #array with all signals at one place
+#                input_signal_array[i] = np.concatenate((signals[i], eventweight_signals[i],normweight_signals[i]), axis=1) #array with all signals at one place
+#                if isyst>0:
+#                    tmp_input_signal_array = np.append(input_signal_array_all[i], input_signal_array[i],axis=0)
+#                    input_signal_array_all[i].resize(tmp_input_signal_array.shape[0],tmp_input_signal_array.shape[1])
+#                    input_signal_array_all[i] = tmp_input_signal_array.copy()
+#                else:
+#                    input_signal_array_all[i] = np.asarray(input_signal_array[i]).copy()
 
         #cleaning
         del input_sample
@@ -453,16 +453,16 @@ def MixInputs(parameters, outputfolder, variations, filepostfix):
 
 
 
-    for i in signals.keys():
-        print 'MIX input_signal_array_all[i].shape: ',input_signal_array_all[i].shape
-        #print'Before shuffle: ',input_signal_array_all[i][0,0]
-        np.random.shuffle(input_signal_array_all[i])
-        #print'After shuffle: ',input_signal_array_all[i][0,0]
-        np.save(outputfolder+'/'+signal_identifiers[i]+'_set_raw.npy', input_signal_array_all[i][:,0:-2])
-        np.save(outputfolder+'/'+signal_identifiers[i]+'_set_raw_eventweight.npy', input_signal_array_all[i][:,-2])
-        np.save(outputfolder+'/'+signal_identifiers[i]+'_set_raw_sample_weights.npy', input_signal_array_all[i][:,-1])
-    np.save(outputfolder+'/input_'+fraction+'_signal_dict_array_all.npy', input_signal_array_all) #signal stored as dictionary 
-    del input_signal_array_all
+#    for i in signals.keys():
+#        print 'MIX input_signal_array_all[i].shape: ',input_signal_array_all[i].shape
+#        #print'Before shuffle: ',input_signal_array_all[i][0,0]
+#        np.random.shuffle(input_signal_array_all[i])
+#        #print'After shuffle: ',input_signal_array_all[i][0,0]
+#        np.save(outputfolder+'/'+signal_identifiers[i]+'_set_raw.npy', input_signal_array_all[i][:,0:-2])
+#        np.save(outputfolder+'/'+signal_identifiers[i]+'_set_raw_eventweight.npy', input_signal_array_all[i][:,-2])
+#        np.save(outputfolder+'/'+signal_identifiers[i]+'_set_raw_sample_weights.npy', input_signal_array_all[i][:,-1])
+#    np.save(outputfolder+'/input_'+fraction+'_signal_dict_array_all.npy', input_signal_array_all) #signal stored as dictionary 
+#    del input_signal_array_all
 
     print 'input_array_all.shape: ',input_array_all.shape
     np.random.shuffle(input_array_all)
@@ -487,9 +487,10 @@ def SplitInputs(parameters, outputfolder, filepostfix):
     input_train_shape1 = len(variable_names)
 
     input_array_all = np.load(outputfolder+'/input_'+fraction+'_bkg_array_all.npy')
-    train1_set, train2_set, test_set, val_set = np.array_split(input_array_all,4,axis=0) #FixME: split now 0.5,0.25,0.25 and not 0.66/0.16/0.16 as before
+    #train1_set, train2_set, test_set, val_set = np.array_split(input_array_all,4,axis=0) #FixME: split now 0.5,0.25,0.25 and not 0.66/0.16/0.16 as before
+    train1_set, train2_set, train3_set, test_set, val_set = np.array_split(input_array_all,5,axis=0) #Split 0.6,0.2,0.2 
 
-    train_set = np.concatenate((train1_set, train2_set), axis=0)
+    train_set = np.concatenate((train1_set, train2_set, train2_set), axis=0)
     
 
     f_train = gzip.GzipFile(outputfolder+'/input_'+fraction+'_train_set_raw.npy.gz', "w")
@@ -628,25 +629,25 @@ def ApplySignalPrepocessing(parameters, outputfolder, filepostfix):
         variable_names = pickle.load(f)
     input_train_shape1 = len(variable_names)
 
-    input_signal_array_all = np.load(outputfolder+'/input_'+fraction+'_signal_dict_array_all.npy',allow_pickle=True)
-    print("input_signal_array_all.shape=", input_signal_array_all.shape)
+#    input_signal_array_all = np.load(outputfolder+'/input_'+fraction+'_signal_dict_array_all.npy',allow_pickle=True)
+#    print("input_signal_array_all.shape=", input_signal_array_all.shape)
     #for i in input_signal_array_all.keys():
 
-    for i in range(len(signal_identifiers)):
-
-        input_signal_array = input_signal_array_all[()][i]
-        print("Preprocessing for input_signal_array.shape",input_signal_array.shape)
-        #print("input_signal_array_all[i].shape",input_signal_array_all[i].shape)
-        if(parameters['preprocess'] == 'StandardScaler'):
-            print("Implement storage of parameters in array!")
-        elif(parameters['preprocess'] == 'MinMaxScaler'):
-            scaler_data_ = np.load(outputfolder+'/NormInfo.npy')
-            Xmin, Xmax = scaler_data_[0], scaler_data_[1]
-            input_signal_array[:,0:input_train_shape1] = (input_signal_array[:,0:input_train_shape1] - Xmin) / (Xmax-Xmin)
-            #input_signal_array_all[()][i] = deepcopy(input_signal_array)
-        print("Store modified input for ",signal_identifiers[i])
-        np.save(outputfolder+'/'+signal_identifiers[i]+'.npy', input_signal_array[:,0:input_train_shape1])
-        np.save(outputfolder+'/'+signal_identifiers[i]+'_eventweight.npy', input_signal_array[:,-1])
+#    for i in range(len(signal_identifiers)):
+#
+##        input_signal_array = input_signal_array_all[()][i]
+##        print("Preprocessing for input_signal_array.shape",input_signal_array.shape)
+#        #print("input_signal_array_all[i].shape",input_signal_array_all[i].shape)
+#        if(parameters['preprocess'] == 'StandardScaler'):
+#            print("Implement storage of parameters in array!")
+#        elif(parameters['preprocess'] == 'MinMaxScaler'):
+#            scaler_data_ = np.load(outputfolder+'/NormInfo.npy')
+#            Xmin, Xmax = scaler_data_[0], scaler_data_[1]
+##            input_signal_array[:,0:input_train_shape1] = (input_signal_array[:,0:input_train_shape1] - Xmin) / (Xmax-Xmin)
+#            #input_signal_array_all[()][i] = deepcopy(input_signal_array)
+#        print("Store modified input for ",signal_identifiers[i])
+#        np.save(outputfolder+'/'+signal_identifiers[i]+'.npy', input_signal_array[:,0:input_train_shape1])
+#        np.save(outputfolder+'/'+signal_identifiers[i]+'_eventweight.npy', input_signal_array[:,-1])
 
 #        np.save(outputfolder+'/'+signal_identifiers[i]+'.npy', input_signal_array_all[:,0:-1][i])
  #       np.save(outputfolder+'/'+signal_identifiers[i]+'_eventweight.npy', input_signal_array_all[:,-1][i])
